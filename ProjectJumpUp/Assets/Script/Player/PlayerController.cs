@@ -11,8 +11,10 @@ public class PlayerController : MonoBehaviour
     private LineRenderer lineRenderer;
 
     [SerializeField]
-    private float throwForce = 10f;
+    private float throwForce = 1f;
 
+    public float discountForce = 3;
+    public float discountThrow = 100;
 
     private bool isDragging = false;
     // Start is called before the first frame update
@@ -47,13 +49,15 @@ public class PlayerController : MonoBehaviour
                 currentDragPosition = Camera.main.ScreenToWorldPoint(touch.position);
 
                 Vector2 position2D = new Vector2(transform.position.x, transform.position.y);
-  
-
-                lineRenderer.SetPosition(0, position2D - dragStartPosition); // 문제생기면 수정
-                lineRenderer.SetPosition(1, dragStartPosition);
 
                 Vector2 dragVector = dragStartPosition - currentDragPosition;
-                float dragDistance = dragVector.magnitude;
+
+                float dragDistance = dragVector.magnitude; // 벡터의 길이
+                Vector2 throwForceVector = dragVector.normalized * dragDistance * throwForce / discountThrow;
+
+
+                lineRenderer.SetPosition(0, position2D); // 문제생기면 수정
+                lineRenderer.SetPosition(1, throwForceVector);
 
             }
             else if (touch.phase == TouchPhase.Ended)
@@ -72,7 +76,7 @@ public class PlayerController : MonoBehaviour
         rb.velocity = Vector2.zero;
 
         float dragDistance = direction.magnitude; // 벡터의 길이
-        Vector2 throwForceVector = direction.normalized * dragDistance * throwForce;
+        Vector2 throwForceVector = direction.normalized * dragDistance * throwForce / discountForce;
 
         //힘 적용
         rb.AddForce(throwForceVector, ForceMode2D.Impulse);
