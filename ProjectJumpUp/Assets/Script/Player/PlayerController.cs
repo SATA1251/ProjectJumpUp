@@ -91,7 +91,6 @@ public class PlayerController : MonoBehaviour
             if (isOnPlatform == false)
             {
                 isJumping = false;
-                Debug.Log("¼º°ø");
             }
         }
     }

@@ -5,5 +5,5 @@ using UnityEngine;
 public class PlayerStat : MonoBehaviour
 {
     private float HP;
-    public float attack;
+    public float attack = 5;
 }
