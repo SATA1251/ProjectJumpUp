@@ -17,6 +17,9 @@ public class PlayerController : MonoBehaviour
 
     public float discountForce = 3;
     public float discountThrow = 100;
+
+    private bool isJumping = false;
+    private bool isOnPlatform = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -37,7 +40,7 @@ public class PlayerController : MonoBehaviour
 
     void PlayerJump()
     {
-        if(Input.touchCount > 0)
+        if(!isJumping && Input.touchCount > 0)
         {
             Touch touch = Input.GetTouch(0);
 
@@ -67,6 +70,7 @@ public class PlayerController : MonoBehaviour
                 Vector2 dragVector = dragStartPosition - currentDragPosition;
                 ThrowObject(dragVector);
                 lineRenderer.enabled = false;
+                isJumping = true;
             }
         }
 
@@ -77,6 +81,18 @@ public class PlayerController : MonoBehaviour
         else if (rb.velocity.y <= 0)
         {
             IgnorPlatfomCollisions(false); // 발판과 충돌
+        }
+    }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Platform")) // platform 태그 확인
+        {
+            if (isOnPlatform == false)
+            {
+                isJumping = false;
+                Debug.Log("성공");
+            }
         }
     }
 
@@ -99,5 +115,7 @@ public class PlayerController : MonoBehaviour
         {
             Physics2D.IgnoreCollision(playerCollider, platformCollider, ignore);
         }
+
+        isOnPlatform = ignore;
     }
 }

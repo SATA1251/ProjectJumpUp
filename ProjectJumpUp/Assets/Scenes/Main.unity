@@ -361,7 +361,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   prefab: {fileID: 7442029860331915048, guid: a53da5994f859d4459a6de1d90b70aa2, type: 3}
-  poolSize: 10
+  poolSize: 20
 --- !u!4 &517495909
 Transform:
   m_ObjectHideFlags: 0
@@ -1161,7 +1161,7 @@ GameObject:
   - component: {fileID: 1489552351}
   m_Layer: 0
   m_Name: BaseMap
-  m_TagString: Untagged
+  m_TagString: Platform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
