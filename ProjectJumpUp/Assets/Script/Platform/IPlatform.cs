@@ -4,7 +4,7 @@ using UnityEngine;
 
 public interface IPlatform
 {
-    //void Initialize();
+    void Initialize();
     void Disappear();
     void Respawn();
 }

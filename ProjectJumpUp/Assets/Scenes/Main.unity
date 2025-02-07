@@ -747,7 +747,7 @@ GameObject:
   - component: {fileID: 699351662}
   m_Layer: 0
   m_Name: PlatformSpawn
-  m_TagString: Untagged
+  m_TagString: PlatformSpawner
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -765,12 +765,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectPool: {fileID: 517495908}
-  spawnInterval: 2
+  spawnInterval: 8
   minSpawn: 1
-  maxSpawn: 5
+  maxSpawn: 3
   spawnAreaMin: {x: -2, y: -4}
   spawnAreaMax: {x: 2, y: 3}
   timer: 0
+  platformNumber: 0
 --- !u!4 &699351663
 Transform:
   m_ObjectHideFlags: 0
@@ -1870,17 +1871,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6374139448870204333, guid: a53da5994f859d4459a6de1d90b70aa2, type: 3}
-      propertyPath: m_Constraints
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 7442029860331915048, guid: a53da5994f859d4459a6de1d90b70aa2, type: 3}
       propertyPath: m_Name
-      value: Platform
+      value: RandomPlatform
       objectReference: {fileID: 0}
     - target: {fileID: 7442029860331915048, guid: a53da5994f859d4459a6de1d90b70aa2, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

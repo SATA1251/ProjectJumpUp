@@ -4,17 +4,27 @@ using UnityEngine;
 
 public abstract class BasePlatform : MonoBehaviour, IPlatform
 {
+    protected SpriteRenderer spriteRenderer;
+    protected BoxCollider2D boxCollider2d;
     // 모든 발판이 상속 받는 클래스
     protected bool isSteppendOn = false; // 중복 방지용 변수
 
-    protected virtual float disappearTime => 3f;
+    protected virtual float disappearTime => 2f;
     protected virtual float respawnTime => 5f;
 
-    //public abstract void Initialize();
-
-    private void OnTriggerEnter(Collider other)
+    private void Start()
     {
-        if (other.CompareTag("Player") && !isSteppendOn)
+        Initialize();
+    }
+    public virtual void Initialize()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        boxCollider2d = GetComponent<BoxCollider2D>();
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.gameObject.CompareTag("Player") && !isSteppendOn)
         {
             isSteppendOn = true;
             StartCoroutine(DisappearAfterDelay());
@@ -29,7 +39,18 @@ public abstract class BasePlatform : MonoBehaviour, IPlatform
 
     public virtual void Disappear()
     {
-        gameObject.SetActive(false);  // 기본적으로 1초 후 비활성화
+        //gameObject.SetActive(false);  // 기본적으로 1초 후 비활성화
+
+        if(spriteRenderer != null)
+        {
+            spriteRenderer.enabled = false;
+        }
+
+        if(boxCollider2d != null)
+        {
+            boxCollider2d.enabled = false;
+        }
+
         StartCoroutine(RespawnAfterDelay());
     }
 
@@ -42,6 +63,15 @@ public abstract class BasePlatform : MonoBehaviour, IPlatform
     public virtual void Respawn()
     {
         isSteppendOn = false;
-        gameObject.SetActive(true); 
+        // gameObject.SetActive(true); 
+        if (spriteRenderer != null)
+        {
+            spriteRenderer.enabled = true;
+        }
+
+        if (boxCollider2d != null)
+        {
+            boxCollider2d.enabled = true;
+        }
     }
 }

@@ -5,15 +5,16 @@ using UnityEngine;
 public class PlatformSpawner : MonoBehaviour
 {
     public ObjectPool objectPool;
-    public float spawnInterval = 2.0f;
+    public float spawnInterval = 8.0f;
 
     public int minSpawn = 1;
-    public int maxSpawn = 5;
+    public int maxSpawn = 3;
 
     public Vector2 spawnAreaMin = new Vector2(-2, -4);
     public Vector2 spawnAreaMax = new Vector2(2, 3);
 
     public float timer = 0;
+    public int platformNumber = 0;
 
     // Update is called once per frame
     void Update()
@@ -31,15 +32,25 @@ public class PlatformSpawner : MonoBehaviour
     void SpawnPlatform()
     {
         int platformCount = Random.Range(minSpawn, maxSpawn + 1);
-
-        for(int i = 0; i < platformCount; i++)
+        for (int i = 0; i < platformCount; i++)
         {
-            float randomX = Random.Range(spawnAreaMin.x, spawnAreaMax.x);
-            float randomY = Random.Range(spawnAreaMin.y, spawnAreaMax.y);
-            Vector2 spawnPosition = new Vector2(randomX, randomY);
+            if (platformNumber < objectPool.poolSize)
+            {
+                float randomX = Random.Range(spawnAreaMin.x, spawnAreaMax.x);
+                float randomY = Random.Range(spawnAreaMin.y, spawnAreaMax.y);
+                Vector2 spawnPosition = new Vector2(randomX, randomY);
 
-            GameObject platform = objectPool.GetObject();
-            platform.transform.position = spawnPosition;
+                GameObject platform = objectPool.GetObject();
+                platform.GetComponent<RandomPlatform>().RespawnRandom();
+                platform.GetComponent<RandomPlatform>().Respawn();
+                platform.transform.position = spawnPosition;
+                platformNumber++;
+            }
         }
+    }
+
+    public void platformNumberDiscount()
+    {
+        platformNumber--;
     }
 }
