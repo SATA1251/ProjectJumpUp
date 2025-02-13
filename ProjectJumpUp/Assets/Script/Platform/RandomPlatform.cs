@@ -6,12 +6,13 @@ public class RandomPlatform : BasePlatform
 {
     PlatformSpawner platformSpawner;
     ObjectPool pool;
-    private void Start()
+    public override void Initialize()
     {
         platformSpawner = GameObject.FindWithTag("PlatformSpawner").GetComponent<PlatformSpawner>();
         pool = FindObjectOfType<ObjectPool>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         boxCollider2d = GetComponent<BoxCollider2D>();
+        playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
     }
     // 기존 방법을 가져와서 쓰기
     public override void Disappear()
@@ -39,6 +40,7 @@ public class RandomPlatform : BasePlatform
     public override void Respawn()
     {
         isSteppendOn = false;
+        isOnPlayer = false;
     }
 
     public void RespawnRandom()

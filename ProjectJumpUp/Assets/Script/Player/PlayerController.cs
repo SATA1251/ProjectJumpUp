@@ -19,9 +19,9 @@ public class PlayerController : MonoBehaviour
     public float discountThrow = 100;
 
     private bool isJumping = false;
-    private bool isOnPlatform = false;
+    public bool isOnPlatform = false;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
 

@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Platform
   - PlatformSpawner
+  - Wall_L
+  - Wall_R
   layers:
   - Default
   - TransparentFX

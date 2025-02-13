@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9020817563612436754}
   - component: {fileID: 4704695697540065634}
   - component: {fileID: 751890552811354607}
+  - component: {fileID: 2297631076908216099}
   m_Layer: 0
   m_Name: MonsterPlatform_1
   m_TagString: Platform
@@ -130,3 +131,15 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &2297631076908216099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9197495043901148826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae88e684d49856047ae021e692f474da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

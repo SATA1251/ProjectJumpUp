@@ -12,6 +12,10 @@ public abstract class BasePlatform : MonoBehaviour, IPlatform
     protected virtual float disappearTime => 2f;
     protected virtual float respawnTime => 5f;
 
+    protected PlayerController playerController;
+
+    protected bool isOnPlayer = false;
+
     private void Start()
     {
         Initialize();
@@ -20,14 +24,23 @@ public abstract class BasePlatform : MonoBehaviour, IPlatform
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
         boxCollider2d = GetComponent<BoxCollider2D>();
+        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
     }
 
     private void OnCollisionEnter2D(Collision2D other)
     {
         if (other.gameObject.CompareTag("Player") && !isSteppendOn)
         {
-            isSteppendOn = true;
-            StartCoroutine(DisappearAfterDelay());
+            if(playerController.isOnPlatform == false)
+            {
+                isOnPlayer = true;
+            }
+
+            if(isOnPlayer == true)
+            {
+                isSteppendOn = true;
+                StartCoroutine(DisappearAfterDelay());
+            }
         }
     }
     
@@ -63,6 +76,7 @@ public abstract class BasePlatform : MonoBehaviour, IPlatform
     public virtual void Respawn()
     {
         isSteppendOn = false;
+        isOnPlayer = false;
         // gameObject.SetActive(true); 
         if (spriteRenderer != null)
         {

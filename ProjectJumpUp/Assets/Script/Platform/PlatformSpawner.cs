@@ -11,7 +11,7 @@ public class PlatformSpawner : MonoBehaviour
     public int maxSpawn = 3;
 
     public Vector2 spawnAreaMin = new Vector2(-2, -4);
-    public Vector2 spawnAreaMax = new Vector2(2, 3);
+    public Vector2 spawnAreaMax = new Vector2(2, 6);
 
     public float timer = 0;
     public int platformNumber = 0;
