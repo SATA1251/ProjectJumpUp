@@ -15,11 +15,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private float throwForce = 1f;
 
-    public float discountForce = 3;
+    public float discountForce = 5;
     public float discountThrow = 100;
 
     private bool isJumping = false;
     public bool isOnPlatform = false;
+
+   private float maxDagDistance = 2.5f;
     // Start is called before the first frame update
     void Awake()
     {
@@ -49,9 +51,9 @@ public class PlayerController : MonoBehaviour
                 dragStartPosition = Camera.main.ScreenToWorldPoint(touch.position);
                 
             }
-           else if (touch.phase == TouchPhase.Moved)
+           else if (touch.phase == TouchPhase.Moved && isJumping == false)
             {
-                float maxDagDistance = 2.5f;
+                
 
                 currentDragPosition = Camera.main.ScreenToWorldPoint(touch.position);
 
@@ -65,7 +67,7 @@ public class PlayerController : MonoBehaviour
                 lineRenderer.SetPosition(1, position2D + (Vector2)dragVector.normalized * dragDistance);
                 lineRenderer.enabled = true;
             }
-            else if (touch.phase == TouchPhase.Ended)
+            else if (touch.phase == TouchPhase.Ended && isJumping == false)
             {
                 Vector2 dragVector = dragStartPosition - currentDragPosition;
                 ThrowObject(dragVector);
@@ -95,12 +97,39 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Platform")) // 플랫폼에서 벗어남
+        {
+            isJumping = true;
+            //lineRenderer.enabled = false;
+        }
+    }
+
     private void ThrowObject(Vector2 direction)
     {
+        //rb.velocity = Vector2.zero;
+        //float dragDistance = direction.magnitude; // 벡터의 길이
+        //Vector2 throwForceVector = direction.normalized * dragDistance * throwForce;
+        ////힘 적용
+        //rb.AddForce(throwForceVector, ForceMode2D.Impulse);
+
         rb.velocity = Vector2.zero;
-        float dragDistance = direction.magnitude; // 벡터의 길이
-        Vector2 throwForceVector = direction.normalized * dragDistance * throwForce;
-        //힘 적용
+
+        // 드래그 거리 계산 (최대값 적용)
+        float dragDistance = Mathf.Min(direction.magnitude, maxDagDistance);
+
+        // 최소 및 최대 던지는 힘 설정
+        float minThrowForce = 2f;
+        float maxThrowForce = 8f;
+
+        // 드래그 거리 비율을 이용해 선형적으로 힘 조절
+        float scaledThrowForce = Mathf.Lerp(minThrowForce, maxThrowForce, dragDistance / maxDagDistance);
+
+        // 던지는 힘 벡터 계산 (정규화된 방향 * 조정된 힘)
+        Vector2 throwForceVector = direction.normalized * scaledThrowForce;
+
+        // 힘 적용
         rb.AddForce(throwForceVector, ForceMode2D.Impulse);
     }
 

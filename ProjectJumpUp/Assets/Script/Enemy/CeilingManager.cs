@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CeilingManager : MonoBehaviour
 {
-    private float stage1_MaxHp = 100;
-    private float stage2_MaxHp = 200;
-    private float stage3_MaxHp = 300;
+    private float stage1_MaxHp = 50;
+    private float stage2_MaxHp = 100;
+    private float stage3_MaxHp = 200;
 
     [SerializeField]
     private float ceil_Hp;
@@ -22,6 +23,10 @@ public class CeilingManager : MonoBehaviour
     public GameObject player;
     public PlayerStat playerStat;
 
+    public GameObject ceilingHP;
+
+    public Slider hpBarSlider;
+
 
     // Start is called before the first frame update
     void Start()
@@ -29,13 +34,32 @@ public class CeilingManager : MonoBehaviour
         stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
         player = GameObject.FindWithTag("Player");
         playerStat = GameObject.FindWithTag("Player").GetComponent<PlayerStat>();
+        ceilingHP = GameObject.FindWithTag("CeilingHP");
+        hpBarSlider = GameObject.FindWithTag("CeilingHP").GetComponent<Slider>();
+
         SetCeilingHP(); // 스테이지 개시시 천장 체력 세팅해주는 함수, 원래 여기 있으면 안된다.
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        SetCeilingUI();
+        CheckHP();
+    }
+
+    public void SetCeilingUI()
+    {
+        if (player != null)
+        {           
+            if (player.transform.position.y > 7.5f)
+            {
+                ceilingHP.SetActive(true);
+            }
+            else
+            {
+                ceilingHP.SetActive(false);
+            }          
+        }
     }
 
     public void SetCeilingHP()
@@ -53,6 +77,14 @@ public class CeilingManager : MonoBehaviour
                 break;
             default:
                 break;
+        }
+    }
+
+    public void CheckHP()
+    {
+        if(hpBarSlider != null)
+        {
+            hpBarSlider.value = ceil_Hp / stage1_MaxHp;
         }
     }
 

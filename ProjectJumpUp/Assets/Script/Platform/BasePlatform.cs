@@ -9,7 +9,7 @@ public abstract class BasePlatform : MonoBehaviour, IPlatform
     // 모든 발판이 상속 받는 클래스
     protected bool isSteppendOn = false; // 중복 방지용 변수
 
-    protected virtual float disappearTime => 2f;
+    protected virtual float disappearTime => 1.5f;
     protected virtual float respawnTime => 5f;
 
     protected PlayerController playerController;
@@ -52,8 +52,6 @@ public abstract class BasePlatform : MonoBehaviour, IPlatform
 
     public virtual void Disappear()
     {
-        //gameObject.SetActive(false);  // 기본적으로 1초 후 비활성화
-
         if(spriteRenderer != null)
         {
             spriteRenderer.enabled = false;
@@ -77,7 +75,6 @@ public abstract class BasePlatform : MonoBehaviour, IPlatform
     {
         isSteppendOn = false;
         isOnPlayer = false;
-        // gameObject.SetActive(true); 
         if (spriteRenderer != null)
         {
             spriteRenderer.enabled = true;
