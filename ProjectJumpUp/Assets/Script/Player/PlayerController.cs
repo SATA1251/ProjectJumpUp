@@ -54,7 +54,6 @@ public class PlayerController : MonoBehaviour
            else if (touch.phase == TouchPhase.Moved && isJumping == false)
             {
                 
-
                 currentDragPosition = Camera.main.ScreenToWorldPoint(touch.position);
 
                 Vector2 position2D = new Vector2(transform.position.x, transform.position.y);

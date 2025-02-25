@@ -21,11 +21,6 @@ public class FixedPlatformManager : MonoBehaviour
 
 
 
-
-
-
-
-
     public List<Vector2> platformPosition_Stage_2;
     public List<Vector2> platformPosition_Stage_3;
     public List<Vector2> platformPosition_Stage_4;
