@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-enum EnemyState
+public enum EnemyState
 {
     Idle,
     Patrol,
@@ -12,27 +12,26 @@ enum EnemyState
 
 public abstract class BaseMonster : MonoBehaviour, IMonster
 {
-    private EnemyState currentState;
-    protected float patrolSpeed = 1f;
-    protected float patrolRange = 2f;
-    protected float sightRange = 1f;
-    protected float attackCooldown = 2f;
+    public EnemyState currentState;
     protected Transform playerTrs;
-
     protected Vector2 initialPosition;
-    protected bool movingRight = true;
-    protected bool isAttacking = false;
-    protected float lastAttackTime;
+
+    protected Rigidbody2D rigid;
+
 
     void Start()
     {
-        Initialize();    
+        Initialize();
     }
 
     public virtual void Initialize()
     {
         currentState = EnemyState.Patrol;
         initialPosition = transform.position;
+        playerTrs = GameObject.Find("Player").GetComponent<Transform>();
+
+        rigid = GetComponent<Rigidbody2D>();
+
     }
 
     // Update is called once per frame
@@ -49,6 +48,10 @@ public abstract class BaseMonster : MonoBehaviour, IMonster
         }
     }
 
+
+
+
+
     void MonsterAi()
     {
         switch (currentState)
@@ -58,36 +61,28 @@ public abstract class BaseMonster : MonoBehaviour, IMonster
                 break;
             case EnemyState.Patrol:
                 Patrol();
-                if (PlayerInSight())
-                {
-                    currentState = EnemyState.Attack;
-                }
+
                 break;
             case EnemyState.Attack:
-                if (!PlayerInSight())
-                {
-                    currentState = EnemyState.Patrol;
-                }
-                else
-                {
-                    Attack();
-                }
+                Attack();
                 break;
         }
     }
 
-    bool PlayerInSight()
-    {
-        return Mathf.Abs(transform.position.x - playerTrs.position.x) <= sightRange;
-    }
 
     protected virtual void Patrol() // 몬스터마다 패트롤 위치 지정해야함
     {
-
+       
+    
     }
 
     protected virtual void Attack()
     {
 
     }
+
+    //private bool IsPlayerDetected(RaycastHit2D hit)
+    //{
+    //    return hit.collider != null && hit.collider.CompareTag("Player");
+    //}
 }

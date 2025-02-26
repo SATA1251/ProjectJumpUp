@@ -15,7 +15,8 @@ public class RandomPlatform : BasePlatform
         pool = FindObjectOfType<ObjectPool>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         boxCollider2d = GetComponent<BoxCollider2D>();
-        playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+        //playerController = GameObject.FindWithTag("Player").GetComponent<PlayerController>();
+        playerController = GameObject.Find("Player").GetComponent<PlayerController>();
         timer = 0;
         disappearTime = 15;
     }
@@ -68,6 +69,16 @@ public class RandomPlatform : BasePlatform
         if (boxCollider2d != null)
         {
             boxCollider2d.enabled = true;
+        }
+   
+        // 플레이어가 위로 이동 중이면 충돌 무시 다시 적용
+        PlayerController player = FindObjectOfType<PlayerController>();
+        if (player != null && boxCollider2d != null)
+        {
+            if (player.IsMovingUp()) // 플레이어가 점프 중인지 확인
+            {
+                Physics2D.IgnoreCollision(boxCollider2d, player.GetComponent<Collider2D>(), true);
+            }
         }
     }
 }

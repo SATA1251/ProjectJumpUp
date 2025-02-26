@@ -1,4 +1,4 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -6,8 +6,8 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
 
-    private Vector2 dragStartPosition; // µå·¡±× ½ÃÀÛ À§Ä¡
-    private Vector2 currentDragPosition; // µå·¡±× Á¾·á À§Ä¡
+    private Vector2 dragStartPosition; // ë“œë˜ê·¸ ì‹œì‘ ìœ„ì¹˜
+    private Vector2 currentDragPosition; // ë“œë˜ê·¸ ì¢…ë£Œ ìœ„ì¹˜
     Rigidbody2D rb;
     private Collider2D playerCollider;
     private LineRenderer lineRenderer;
@@ -30,7 +30,7 @@ public class PlayerController : MonoBehaviour
         playerCollider = GetComponent<Collider2D>();
 
         lineRenderer = GetComponent<LineRenderer>();
-        lineRenderer.positionCount = 2; // ½ÃÀÛÁ¡°ú ³¡Á¡ Ç¥½Ã
+        lineRenderer.positionCount = 2; // ì‹œì‘ì ê³¼ ëì  í‘œì‹œ
         lineRenderer.enabled = false;
     }
 
@@ -60,9 +60,9 @@ public class PlayerController : MonoBehaviour
 
                 Vector2 dragVector = dragStartPosition - currentDragPosition;
 
-                float dragDistance = Mathf.Min(dragVector.magnitude, maxDagDistance); // º¤ÅÍÀÇ ±æÀÌ
+                float dragDistance = Mathf.Min(dragVector.magnitude, maxDagDistance); // ë²¡í„°ì˜ ê¸¸ì´
 
-                lineRenderer.SetPosition(0, position2D); // ¹®Á¦»ı±â¸é ¼öÁ¤
+                lineRenderer.SetPosition(0, position2D); // ë¬¸ì œìƒê¸°ë©´ ìˆ˜ì •
                 lineRenderer.SetPosition(1, position2D + (Vector2)dragVector.normalized * dragDistance);
                 lineRenderer.enabled = true;
             }
@@ -75,19 +75,19 @@ public class PlayerController : MonoBehaviour
             }
         }
 
-        if (rb.velocity.y > 0)
+        if (IsMovingUp())
         {
-            IgnorPlatfomCollisions(true); // ¹ßÆÇ°ú Ãæµ¹ ¹«½Ã
+            IgnorPlatfomCollisions(true); // ë°œíŒê³¼ ì¶©ëŒ ë¬´ì‹œ
         }
-        else if (rb.velocity.y <= 0)
+        else if (!IsMovingUp())
         {
-            IgnorPlatfomCollisions(false); // ¹ßÆÇ°ú Ãæµ¹
+            IgnorPlatfomCollisions(false); // ë°œíŒê³¼ ì¶©ëŒ
         }
     }
 
     void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Platform")) // platform ÅÂ±× È®ÀÎ
+        if (collision.gameObject.CompareTag("Platform")) // platform íƒœê·¸ í™•ì¸
         {
             if (isOnPlatform == false)
             {
@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
 
     void OnCollisionExit2D(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Platform")) // ÇÃ·§Æû¿¡¼­ ¹ş¾î³²
+        if (collision.gameObject.CompareTag("Platform")) // í”Œë«í¼ì—ì„œ ë²—ì–´ë‚¨
         {
             isJumping = true;
             //lineRenderer.enabled = false;
@@ -108,27 +108,27 @@ public class PlayerController : MonoBehaviour
     private void ThrowObject(Vector2 direction)
     {
         //rb.velocity = Vector2.zero;
-        //float dragDistance = direction.magnitude; // º¤ÅÍÀÇ ±æÀÌ
+        //float dragDistance = direction.magnitude; // ë²¡í„°ì˜ ê¸¸ì´
         //Vector2 throwForceVector = direction.normalized * dragDistance * throwForce;
-        ////Èû Àû¿ë
+        ////í˜ ì ìš©
         //rb.AddForce(throwForceVector, ForceMode2D.Impulse);
 
         rb.velocity = Vector2.zero;
 
-        // µå·¡±× °Å¸® °è»ê (ÃÖ´ë°ª Àû¿ë)
+        // ë“œë˜ê·¸ ê±°ë¦¬ ê³„ì‚° (ìµœëŒ€ê°’ ì ìš©)
         float dragDistance = Mathf.Min(direction.magnitude, maxDagDistance);
 
-        // ÃÖ¼Ò ¹× ÃÖ´ë ´øÁö´Â Èû ¼³Á¤
+        // ìµœì†Œ ë° ìµœëŒ€ ë˜ì§€ëŠ” í˜ ì„¤ì •
         float minThrowForce = 2f;
         float maxThrowForce = 8f;
 
-        // µå·¡±× °Å¸® ºñÀ²À» ÀÌ¿ëÇØ ¼±ÇüÀûÀ¸·Î Èû Á¶Àı
+        // ë“œë˜ê·¸ ê±°ë¦¬ ë¹„ìœ¨ì„ ì´ìš©í•´ ì„ í˜•ì ìœ¼ë¡œ í˜ ì¡°ì ˆ
         float scaledThrowForce = Mathf.Lerp(minThrowForce, maxThrowForce, dragDistance / maxDagDistance);
 
-        // ´øÁö´Â Èû º¤ÅÍ °è»ê (Á¤±ÔÈ­µÈ ¹æÇâ * Á¶Á¤µÈ Èû)
+        // ë˜ì§€ëŠ” í˜ ë²¡í„° ê³„ì‚° (ì •ê·œí™”ëœ ë°©í–¥ * ì¡°ì •ëœ í˜)
         Vector2 throwForceVector = direction.normalized * scaledThrowForce;
 
-        // Èû Àû¿ë
+        // í˜ ì ìš©
         rb.AddForce(throwForceVector, ForceMode2D.Impulse);
     }
 
@@ -136,13 +136,22 @@ public class PlayerController : MonoBehaviour
     {
             Collider2D[] platformColliders = GameObject.FindGameObjectsWithTag("Platform")
             .Select(platform => platform.GetComponent<Collider2D>())
+            .Where(collider => collider != null) //  null ì²´í¬ ì¶”ê°€
             .ToArray();
 
         foreach( Collider2D platformCollider in platformColliders )
         {
-            Physics2D.IgnoreCollision(playerCollider, platformCollider, ignore);
+            if (playerCollider != null && platformCollider != null)
+            {
+                Physics2D.IgnoreCollision(playerCollider, platformCollider, ignore);
+            }
         }
 
         isOnPlatform = ignore;
+    }
+
+    public bool IsMovingUp()
+    {
+        return rb.velocity.y > 0;
     }
 }
