@@ -47,11 +47,9 @@ public class MoveMonster : BaseMonster
 
         RaycastHit2D rayHit = Physics2D.Raycast(frontVec, Vector3.down, 1, LayerMask.GetMask("Platform")); // 여기를 몬스터 플랫폼으로 해야할까?
 
+        RaycastHit2D playerHit = CheckPlayerDetection();  // 플레이어 감지 체크
 
-        traceHitR = Physics2D.Raycast(traceVec, Vector3.right, 1, LayerMask.GetMask("Player"));
-        traceHitL = Physics2D.Raycast(traceVec, Vector3.left, 1, LayerMask.GetMask("Player"));
-
-        if (IsPlayerDetected(traceHitR) || IsPlayerDetected(traceHitL))
+        if (playerHit.collider != null)
         {
             Debug.Log("공격 시작");
             CancelInvoke("Move");
@@ -72,6 +70,7 @@ public class MoveMonster : BaseMonster
 
     private bool IsPlayerDetected(RaycastHit2D hit)
     {
+        Debug.Log("Collider: " + hit.collider?.name); // 충돌한 오브젝트의 이름을 출력
         return hit.collider != null && hit.collider.CompareTag("Player");
     }
 
@@ -94,6 +93,18 @@ public class MoveMonster : BaseMonster
 
         float direction = nextMove;
 
+        RaycastHit2D playerHit = CheckPlayerDetection();
+
+        // 플레이어 감지 여부 확인 (처음 공격을 시작하기 전에 플레이어가 있는지 체크)
+        if (playerHit.collider == null)
+        {
+            Debug.Log("공격중 플레이어 감지 실패");
+            // 플레이어가 감지되지 않았다면 공격을 취소하고 패트롤 상태로 전환
+            isAttacking = false;
+            currentState = EnemyState.Patrol;
+            yield break;
+        }
+
         projectile.gameObject.SetActive(true);
 
         // 투사체를 일정 시간 동안 이동
@@ -112,10 +123,23 @@ public class MoveMonster : BaseMonster
         // 공격 종료
         isAttacking = false;
 
-        if (!(IsPlayerDetected(traceHitR) || IsPlayerDetected(traceHitL)))
+        if (playerHit.collider == null)
         {
-            currentState = EnemyState.Patrol;
+            Debug.Log("공격 종료");
+            currentState = EnemyState.Patrol;  // 다시 패트롤로 안넘어가는 문제가 있음
             Invoke("Move", 3);
         }
+    }
+
+
+    private RaycastHit2D CheckPlayerDetection()
+    {
+        Vector2 traceVec = new Vector2(rigid.position.x, rigid.position.y);  // Raycast 시작 위치
+
+        // 오른쪽과 왼쪽을 동시에 체크
+        RaycastHit2D traceHitR = Physics2D.Raycast(traceVec, Vector3.right, 1, LayerMask.GetMask("Player"));
+        RaycastHit2D traceHitL = Physics2D.Raycast(traceVec, Vector3.left, 1, LayerMask.GetMask("Player"));
+
+        return (traceHitR.collider != null) ? traceHitR : traceHitL; // 플레이어가 감지된 첫 번째 RaycastHit 반환
     }
 }
