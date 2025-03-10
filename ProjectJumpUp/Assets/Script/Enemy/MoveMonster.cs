@@ -93,6 +93,8 @@ public class MoveMonster : BaseMonster
 
         float direction = nextMove;
 
+        rigid.velocity = Vector2.zero;
+
         RaycastHit2D playerHit = CheckPlayerDetection();
 
         // 플레이어 감지 여부 확인 (처음 공격을 시작하기 전에 플레이어가 있는지 체크)
