@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class PlayerStat : MonoBehaviour
 {
-    private float HP;
+    private float HP = 100f;
     public float attack = 5;
+
+    public void PlayerDamage(float damage)
+    {
+        HP -= damage;
+    }
+
+    public void PlayerHeal(float heal)
+    {
+        HP += heal;
+    }
 }

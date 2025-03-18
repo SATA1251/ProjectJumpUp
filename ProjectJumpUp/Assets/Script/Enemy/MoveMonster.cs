@@ -45,7 +45,7 @@ public class MoveMonster : BaseMonster
         Debug.DrawRay(traceVec, Vector3.right, new Color(1, 0, 0));
         Debug.DrawRay(traceVec, Vector3.left, new Color(0, 0, 1));
 
-        RaycastHit2D rayHit = Physics2D.Raycast(frontVec, Vector3.down, 1, LayerMask.GetMask("Platform")); // 여기를 몬스터 플랫폼으로 해야할까?
+        RaycastHit2D rayHit = Physics2D.Raycast(frontVec, Vector3.down, 0.3f, LayerMask.GetMask("Platform")); // 여기를 몬스터 플랫폼으로 해야할까?
 
         RaycastHit2D playerHit = CheckPlayerDetection();  // 플레이어 감지 체크
 
