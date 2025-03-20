@@ -24,6 +24,22 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    private IEnumerator ApplySavedVolume()
+    {
+        yield return null; // 한 프레임 대기
+
+        float bgmVolume = PlayerPrefs.GetFloat("BGMVolume", 0.75f);
+        float sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 0.75f);
+
+        SetBGMVolume(bgmVolume);
+        SetSFXVolume(sfxVolume);
+    }
+
+    private void Start()
+    {
+        StartCoroutine(ApplySavedVolume());
+    }
+
     public void PlayBGM(AudioClip bgmClip)
     {
         if(bgmSource.clip != bgmClip)
@@ -42,22 +58,18 @@ public class AudioManager : MonoBehaviour
 
     public void SetBGMVolume(float volume)
     {
+        volume = Mathf.Clamp(volume, 0.0001f, 1f); // 0 값 방지
         audioMixer.SetFloat("BGMVolume", Mathf.Log10(volume) * 20);
         PlayerPrefs.SetFloat("BGMVolume", volume);
+        PlayerPrefs.Save(); // 변경 사항 즉시 저장
     }
 
     public void SetSFXVolume(float volume)
     {
+        volume = Mathf.Clamp(volume, 0.0001f, 1f);
         audioMixer.SetFloat("SFXVolume", Mathf.Log10(volume) * 20);
         PlayerPrefs.SetFloat("SFXVolume", volume);
+        PlayerPrefs.Save();
     }
 
-    private void Start()
-    {
-        // 게임 시작 시 저장된 볼륨 적용
-        float bgmVolume = PlayerPrefs.GetFloat("BGMVolume", 0.75f);
-        float sfxVolume = PlayerPrefs.GetFloat("SFXVolume", 0.75f);
-        SetBGMVolume(bgmVolume);
-        SetSFXVolume(sfxVolume);
-    }
 }

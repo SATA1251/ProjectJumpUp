@@ -53,6 +53,6 @@ public class SkillSelectUI : MonoBehaviour
     // 다음 씬으로 이동
     public void StartGame()
     {
-        SkillManager.Instance.LoadNextScene("Main");
+        Scene.instance.LoadReadGameScene();
     }
 }

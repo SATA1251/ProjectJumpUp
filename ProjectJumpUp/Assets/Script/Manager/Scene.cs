@@ -13,6 +13,10 @@ public class Scene : MonoBehaviour
 
     int currentStageNum = 0;
 
+    public Button optionButton;
+    public Button startButton;
+
+
     private void Awake()
     {
         if(instance == null)
@@ -23,6 +27,21 @@ public class Scene : MonoBehaviour
         else
         {
             Destroy(gameObject);
+        }
+
+
+    }
+
+    private void Start()
+    {
+        if (optionButton != null)
+        {
+            optionButton.onClick.AddListener(LoadOptionScene);
+        }
+
+        if (startButton != null)
+        {
+            startButton.onClick.AddListener(LoadStageSelectScene);
         }
     }
 
@@ -36,7 +55,7 @@ public class Scene : MonoBehaviour
         SceneManager.LoadScene("StageSelectScene");
     }
 
-    public void LoadReadGameScene(int stageNum)
+    public void LoadReadyRoomScene(int stageNum)
     {
         currentStageNum = stageNum;
 

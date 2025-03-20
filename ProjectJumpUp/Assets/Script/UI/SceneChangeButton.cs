@@ -18,7 +18,7 @@ public class SceneChangeButton : MonoBehaviour
     {
         if(Scene.instance != null)
         {
-            Scene.instance.LoadReadGameScene(sceneToLoad);           
+            Scene.instance.LoadReadyRoomScene(sceneToLoad);           
         }
     }
 
