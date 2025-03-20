@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Scene : MonoBehaviour
 {
 
     public static Scene instance;
     private string lastLoadScene;
+
+    int currentStageNum = 0;
 
     private void Awake()
     {
@@ -30,21 +33,46 @@ public class Scene : MonoBehaviour
 
     public void LoadStageSelectScene()
     {
+        SceneManager.LoadScene("StageSelectScene");
+    }
+
+    public void LoadReadGameScene(int stageNum)
+    {
+        currentStageNum = stageNum;
+
+       SceneManager.LoadScene("ReadyRoomScene");
 
     }
+
     public void LoadReadGameScene()
     {
-        SceneManager.LoadScene("Main");
+        switch (currentStageNum)
+        {
+            case 1:
+                SceneManager.LoadScene("Main");
+                currentStageNum = 0;
+                break;
+            case 2:
+                currentStageNum = 0;
+                break;
+            case 3:
+                currentStageNum = 0;
+                break;
+            case 4:
+                currentStageNum = 0;
+                break;
+            default:
+                break;
+        }
     }
+
     public void LoadOptionScene()
     {
-        lastLoadScene = SceneManager.GetActiveScene().name;
+        // 현재 씬 이름을 저장
+        PlayerPrefs.SetString("PreviousScene", SceneManager.GetActiveScene().name);
+
+        // 옵션 씬으로 이동
         SceneManager.LoadScene("Option");
     }
 
-    public void LoadLastScene() // 옵션씬에서 다시 원래 씬으로 전환
-    {
-        SceneManager.LoadScene(lastLoadScene);
-        lastLoadScene = null;
-    }
 }

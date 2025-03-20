@@ -9,8 +9,17 @@ EditorBuildSettings:
     path: Assets/Scenes/TitleScene.unity
     guid: 3aa3e805e2605544295162afeb1f9e9b
   - enabled: 1
+    path: Assets/Scenes/StageSelectScene.unity
+    guid: d9eaf9acab6a11042bef43ebae4f3578
+  - enabled: 1
+    path: Assets/Scenes/ReadyRoomScene.unity
+    guid: 7b0c716f91c59b247b1f0b0037f167a9
+  - enabled: 1
     path: Assets/Scenes/Main.unity
     guid: 3fc8acdd13e6c734bafef6554d6fdbcd
+  - enabled: 1
+    path: Assets/Scenes/Option.unity
+    guid: 8fcb083ae086d754aaae2496b23325cd
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: f12e5660be4af3c4691686b82e1b5e58, type: 2}
     com.unity.adaptiveperformance.samsung.android.provider_settings: {fileID: 11400000, guid: e4b4b205be160434b9aa4c763185541d, type: 2}
