@@ -20,7 +20,7 @@ public class TitleSceneManager : MonoBehaviour
                     return;
                 }
 
-                Scene.instance.LoadStageSelectScene();
+                GameSceneManager.instance.LoadStageSelectScene();
 
             }
         }

@@ -7,14 +7,45 @@ public class PlatformSpawner : MonoBehaviour
     public ObjectPool objectPool;
     public float spawnInterval = 8.0f;
 
-    public int minSpawn = 1;
-    public int maxSpawn = 3;
+    public int minSpawn;
+    public int maxSpawn;
 
-    public Vector2 spawnAreaMin = new Vector2(-2, -4);
-    public Vector2 spawnAreaMax = new Vector2(2, 6);
+    public Vector2 spawnAreaMin;
+    public Vector2 spawnAreaMax;
 
     public float timer = 0;
     public int platformNumber = 0;
+
+    private StageManager stageManager;
+
+    void Start()
+    {
+        stageManager = GameObject.Find("StageManager").GetComponent<StageManager>();
+
+
+        switch (stageManager.GetStageNum())
+        {
+            case 1:
+                spawnAreaMin = new Vector2(-2, -4);
+                spawnAreaMax = new Vector2(2, 6);
+                minSpawn = 1;
+                maxSpawn = 3;
+                break;
+             case 2:
+                spawnAreaMin = new Vector2(-2, -4);
+                spawnAreaMax = new Vector2(2, 11);
+                minSpawn = 1;
+                maxSpawn = 4;
+                break;
+             case 3:
+             break;
+             case 4:
+             break;
+            default:
+                break;
+        }
+
+    }
 
     // Update is called once per frame
     void Update()

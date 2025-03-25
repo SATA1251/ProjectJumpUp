@@ -50,15 +50,38 @@ public class CeilingManager : MonoBehaviour
     public void SetCeilingUI()
     {
         if (player != null)
-        {           
-            if (player.transform.position.y > 7.5f)
+        {
+            switch (stageManager.GetStageNum())
             {
-                ceilingHP.SetActive(true);
+                case 1:
+                    if (player.transform.position.y > 7.5f)
+                    {
+                        ceilingHP.SetActive(true);
+                    }
+                    else
+                    {
+                        ceilingHP.SetActive(false);
+                    }
+                    break;
+                case 2:
+                    if (player.transform.position.y > 15.0f)
+                    {
+                        ceilingHP.SetActive(true);
+                    }
+                    else
+                    {
+                        ceilingHP.SetActive(false);
+                    }
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                default:
+                    break;
             }
-            else
-            {
-                ceilingHP.SetActive(false);
-            }          
+
+     
         }
     }
 

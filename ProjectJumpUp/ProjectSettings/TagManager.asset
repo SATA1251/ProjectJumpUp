@@ -9,6 +9,8 @@ TagManager:
   - Wall_L
   - Wall_R
   - CeilingHP
+  - OptionButton
+  - StartButton
   layers:
   - Default
   - TransparentFX

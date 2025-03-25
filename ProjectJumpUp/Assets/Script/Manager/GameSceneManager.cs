@@ -5,13 +5,13 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class Scene : MonoBehaviour
+public class GameSceneManager : MonoBehaviour
 {
 
-    public static Scene instance;
+    public static GameSceneManager instance;
     private string lastLoadScene;
 
-    int currentStageNum = 0;
+    public int currentStageNum = 0;
 
     public Button optionButton;
     public Button startButton;
@@ -34,13 +34,34 @@ public class Scene : MonoBehaviour
 
     private void Start()
     {
-        if (optionButton != null)
+        RegisterButtonEvents();
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDestroy()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        RegisterButtonEvents();
+    }
+
+    private void RegisterButtonEvents()
+    {
+        optionButton = GameObject.FindWithTag("OptionButton")?.GetComponent<Button>();
+        startButton = GameObject.FindWithTag("StartButton")?.GetComponent<Button>();
+
+        if(optionButton != null)
         {
+            optionButton.onClick.RemoveAllListeners();
             optionButton.onClick.AddListener(LoadOptionScene);
         }
 
-        if (startButton != null)
+        if(startButton != null)
         {
+            startButton.onClick.RemoveAllListeners();
             startButton.onClick.AddListener(LoadStageSelectScene);
         }
     }
@@ -68,17 +89,18 @@ public class Scene : MonoBehaviour
         switch (currentStageNum)
         {
             case 1:
-                SceneManager.LoadScene("Main");
-                currentStageNum = 0;
+                SceneManager.LoadScene("Stage1");
+                //currentStageNum = 0;
                 break;
             case 2:
-                currentStageNum = 0;
+                SceneManager.LoadScene("Stage2");
+                // currentStageNum = 0;
                 break;
             case 3:
-                currentStageNum = 0;
+                //currentStageNum = 0;
                 break;
             case 4:
-                currentStageNum = 0;
+               // currentStageNum = 0;
                 break;
             default:
                 break;

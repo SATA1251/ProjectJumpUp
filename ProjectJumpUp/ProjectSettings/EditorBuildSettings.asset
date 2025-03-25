@@ -15,8 +15,11 @@ EditorBuildSettings:
     path: Assets/Scenes/ReadyRoomScene.unity
     guid: 7b0c716f91c59b247b1f0b0037f167a9
   - enabled: 1
-    path: Assets/Scenes/Main.unity
+    path: Assets/Scenes/Stage1.unity
     guid: 3fc8acdd13e6c734bafef6554d6fdbcd
+  - enabled: 1
+    path: Assets/Scenes/Stage2.unity
+    guid: c7e62d564be0ce84eac25690a96d4f51
   - enabled: 1
     path: Assets/Scenes/Option.unity
     guid: 8fcb083ae086d754aaae2496b23325cd
