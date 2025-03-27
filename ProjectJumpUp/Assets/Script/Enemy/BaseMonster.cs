@@ -57,11 +57,10 @@ public abstract class BaseMonster : MonoBehaviour, IMonster
         switch (currentState)
         {
             case EnemyState.Idle:
-
+                Idle();
                 break;
             case EnemyState.Patrol:
                 Patrol();
-
                 break;
             case EnemyState.Attack:
                 Attack();
@@ -69,6 +68,11 @@ public abstract class BaseMonster : MonoBehaviour, IMonster
         }
     }
 
+    protected virtual void Idle() // 몬스터마다 패트롤 위치 지정해야함
+    {
+
+
+    }
 
     protected virtual void Patrol() // 몬스터마다 패트롤 위치 지정해야함
     {

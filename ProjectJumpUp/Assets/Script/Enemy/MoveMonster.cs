@@ -74,7 +74,7 @@ public class MoveMonster : BaseMonster
         return hit.collider != null && hit.collider.CompareTag("Player");
     }
 
-    IEnumerator AttackLogic()
+    private IEnumerator AttackLogic()
     {
         // 공격 중이면 실행하지 않음
         if (isAttacking) yield break;

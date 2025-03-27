@@ -27,15 +27,15 @@ public class PlatformSpawner : MonoBehaviour
         {
             case 1:
                 spawnAreaMin = new Vector2(-2, -4);
-                spawnAreaMax = new Vector2(2, 6);
+                spawnAreaMax = new Vector2(2, 12);
                 minSpawn = 1;
                 maxSpawn = 3;
                 break;
              case 2:
                 spawnAreaMin = new Vector2(-2, -4);
-                spawnAreaMax = new Vector2(2, 11);
+                spawnAreaMax = new Vector2(2, 30);
                 minSpawn = 1;
-                maxSpawn = 4;
+                maxSpawn = 5;
                 break;
              case 3:
              break;
