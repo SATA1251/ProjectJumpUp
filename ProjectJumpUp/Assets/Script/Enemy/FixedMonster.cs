@@ -5,7 +5,7 @@ using UnityEngine;
 public class FixedMonster : BaseMonster
 {
     [SerializeField] private float detectionRange = 3f;
-    [SerializeField] private float attackCooldown = 0.5f;
+    [SerializeField] private float attackCooldown = 0.2f;
     [SerializeField] private float attackDelay = 1f;
     [SerializeField] private Transform attackPoint;
     [SerializeField] private float attackRadius = 1f;

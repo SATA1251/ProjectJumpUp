@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class MoveMonster : BaseMonster
 {
-    public int nextMove;
+    protected int direction = 0;
 
     private bool isAttacking = false;
     private float lastAttackTime = 3f;
@@ -23,9 +23,12 @@ public class MoveMonster : BaseMonster
         Invoke("Move", 3);
     }
 
-    void Move()
+    protected virtual void Move()
     {
-        nextMove = Random.Range(-1, 2);
+        if (direction == 0)
+        {
+            direction = (Random.value < 0.5f) ? -1 : 1;
+        }
 
         Invoke("Move", 3);
     }
@@ -37,9 +40,9 @@ public class MoveMonster : BaseMonster
         if (currentState == EnemyState.Attack)
             return;
 
-        rigid.velocity = new Vector2(nextMove, rigid.velocity.y);
+        rigid.velocity = new Vector2(direction, rigid.velocity.y);
 
-        Vector2 frontVec = new Vector2(rigid.position.x + nextMove * 0.3f, rigid.position.y);
+        Vector2 frontVec = new Vector2(rigid.position.x + direction * 0.3f, rigid.position.y);
         Vector2 traceVec = new Vector2(rigid.position.x, rigid.position.y);
         Debug.DrawRay(frontVec, Vector3.down, new Color(0, 1, 0));
         Debug.DrawRay(traceVec, Vector3.right, new Color(1, 0, 0));
@@ -57,7 +60,7 @@ public class MoveMonster : BaseMonster
         }
         else if (rayHit.collider == null && currentState != EnemyState.Attack)
         {
-            nextMove *= -1;
+            direction *= -1;
             CancelInvoke("Move");
             Invoke("Move", 3);
         }
@@ -90,8 +93,6 @@ public class MoveMonster : BaseMonster
         float projectileSpeed = 1.0f;  // 투사체 속도
         float projectileLifetime = 3f; // 투사체 유지 시간
         float elapsedTime = 0f;
-
-        float direction = nextMove;
 
         rigid.velocity = Vector2.zero;
 
@@ -134,14 +135,19 @@ public class MoveMonster : BaseMonster
     }
 
 
-    private RaycastHit2D CheckPlayerDetection()
+    protected virtual RaycastHit2D CheckPlayerDetection()
     {
         Vector2 traceVec = new Vector2(rigid.position.x, rigid.position.y);  // Raycast 시작 위치
 
-        // 오른쪽과 왼쪽을 동시에 체크
-        RaycastHit2D traceHitR = Physics2D.Raycast(traceVec, Vector3.right, 1, LayerMask.GetMask("Player"));
-        RaycastHit2D traceHitL = Physics2D.Raycast(traceVec, Vector3.left, 1, LayerMask.GetMask("Player"));
+        Vector2 directionVec = (direction == 1) ? Vector2.right : Vector2.left;
 
-        return (traceHitR.collider != null) ? traceHitR : traceHitL; // 플레이어가 감지된 첫 번째 RaycastHit 반환
+
+        RaycastHit2D traceHit = Physics2D.Raycast(traceVec, directionVec, 1, LayerMask.GetMask("Player"));
+
+        // 오른쪽과 왼쪽을 동시에 체크
+        //RaycastHit2D traceHitR = Physics2D.Raycast(traceVec, Vector3.right, 1, LayerMask.GetMask("Player"));
+        //RaycastHit2D traceHitL = Physics2D.Raycast(traceVec, Vector3.left, 1, LayerMask.GetMask("Player"));
+
+        return traceHit; // 플레이어가 감지된 첫 번째 RaycastHit 반환
     }
 }
