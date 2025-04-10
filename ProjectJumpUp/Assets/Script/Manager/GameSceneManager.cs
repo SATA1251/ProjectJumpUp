@@ -97,6 +97,7 @@ public class GameSceneManager : MonoBehaviour
                 // currentStageNum = 0;
                 break;
             case 3:
+                SceneManager.LoadScene("Stage3");
                 //currentStageNum = 0;
                 break;
             case 4:

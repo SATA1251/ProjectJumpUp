@@ -4,14 +4,20 @@ using UnityEngine;
 
 public interface ISkill
 {
+    bool IsPassive { get; }
     void Activate();
+    void UsingPassive();
 }
 
 public class SkillLibrary : MonoBehaviour
 {
     private GameObject player;
-    private GameObject playerPlatform;
     private Transform playerTransform;
+
+    // 스킬 관련 오브젝트 체크
+    private GameObject playerPlatform;
+    private GameObject wallObject_R;
+    private GameObject wallObject_L;
 
     private Dictionary<SkillList, ISkill> skillDictionary;
 
@@ -19,13 +25,13 @@ public class SkillLibrary : MonoBehaviour
     {
         skillDictionary = new Dictionary<SkillList, ISkill>
         {
-            { SkillList.CreatePlatform, new CreatePlatform() },
-            { SkillList.Spider_p, new Spider_p() },
+            { SkillList.CreatePlatform, new CreatePlatform(this) },
             { SkillList.Invincible, new Invincible() },
-            { SkillList.DoubleJump_p, new DoubleJump_p() },
             { SkillList.Headbutt, new Headbutt() },
             { SkillList.Teleport, new Teleport() },
             { SkillList.Rest, new Rest() },
+            { SkillList.Spider_p, new Spider_p(this) },
+            { SkillList.DoubleJump_p, new DoubleJump_p() },
             { SkillList.Unbreak_p, new Unbreak_p() },
             { SkillList.BottomJump_p, new BottomJump_p() }
         };
@@ -36,6 +42,9 @@ public class SkillLibrary : MonoBehaviour
         player = GameObject.Find("Player");
         playerTransform = player.GetComponent<Transform>();
         playerPlatform = GameObject.Find("PlayerPlatform");
+        wallObject_R = GameObject.Find("Wall_R");
+        wallObject_L = GameObject.Find("Wall_L");
+
     }
 
     public ISkill GetSkill(SkillList skill)
@@ -45,6 +54,8 @@ public class SkillLibrary : MonoBehaviour
 
     private abstract class SkillBase : ISkill
     {
+        public virtual bool IsPassive => false;
+
         protected float cooldownTime;
         private float lastUsedTime = -9999f;
 
@@ -66,39 +77,60 @@ public class SkillLibrary : MonoBehaviour
             }
         }
 
-        protected abstract void UseSkill(); // 각 스킬마다 다르게 구현
+        public void UsingPassive()
+        {
+            if (IsAvailable())
+            {
+                lastUsedTime = Time.time;
+                PassiveSkill();
+            }
+            else
+            {
+                UnPassiveSkill();
+                Debug.Log($"[{this.GetType().Name}] 패시브 쿨타임 진행중, 남은시간 : {lastUsedTime + cooldownTime - Time.time:F1}초");
+            }
+        }
+
+        protected virtual void UseSkill()
+        {
+
+        }
+        // 각 스킬마다 다르게 구현
+        protected virtual void PassiveSkill()
+        {
+
+        }
+
+        protected virtual void UnPassiveSkill()
+        {
+
+        }
 
     }
 
     private class CreatePlatform : SkillBase
     {
-        public CreatePlatform() { cooldownTime = 5f; } // 5초 쿨타임
+        private SkillLibrary library;
+
+        public CreatePlatform(SkillLibrary lib)
+        { 
+            cooldownTime = 5f;
+            library = lib;
+        } // 5초 쿨타임
 
         protected override void UseSkill()
         {
             Debug.Log("플랫폼 생성 스킬 사용!");
-            // playerPlatform.GetComponent<PlayerPlatform>().Respawn();
+            library.playerPlatform.transform.position = library.player.transform.position + new Vector3(0, -1f, 0);
+            library.playerPlatform.GetComponent<PlayerPlatform>().Respawn();
         }
     }
 
-    private class Spider_p : SkillBase
-    {
-        public Spider_p() { cooldownTime = 3f; }
-
-        protected override void UseSkill() { Debug.Log("거미 스킬 사용!"); }
-    }
     private class Invincible : SkillBase
     {
         public Invincible() { cooldownTime = 3f; }
 
         protected override void UseSkill() { Debug.Log("무적 스킬 사용!"); }
-    }
-
-    private class DoubleJump_p : SkillBase
-    {
-        public DoubleJump_p() { cooldownTime = 3f; }
-
-        protected override void UseSkill() { Debug.Log("더블 점프 스킬 사용!"); }
     }
 
     private class Headbutt : SkillBase
@@ -121,6 +153,42 @@ public class SkillLibrary : MonoBehaviour
 
         protected override void UseSkill() { Debug.Log("휴식 스킬 사용!"); }
     }
+
+    private class Spider_p : SkillBase
+    {
+        public override bool IsPassive => true; // 패시브 스킬 판단
+        private SkillLibrary library;
+
+        public Spider_p(SkillLibrary lib)
+        {
+            library = lib;
+            cooldownTime = 0.0f;
+        }
+
+        protected override void PassiveSkill()
+        {
+            Debug.Log("거미 스킬 사용중!");
+
+            library.player.GetComponent<PlayerController>().passiveSpiderAct = true;
+
+        }
+
+        protected override void UnPassiveSkill()
+        {
+            Debug.Log("거미 스킬 쿨타임중");
+
+            library.player.GetComponent<PlayerController>().passiveSpiderAct = false;
+
+        }
+    }
+
+    private class DoubleJump_p : SkillBase
+    {
+        public DoubleJump_p() { cooldownTime = 3f; }
+
+        protected override void UseSkill() { Debug.Log("더블 점프 스킬 사용!"); }
+    }
+
     private class Unbreak_p : SkillBase
     {
         public Unbreak_p() { cooldownTime = 3f; }

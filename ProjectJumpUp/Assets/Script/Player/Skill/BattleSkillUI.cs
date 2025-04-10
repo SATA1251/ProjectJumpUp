@@ -13,6 +13,8 @@ public class BattleSkillUI : MonoBehaviour
 
     private Dictionary<int, float> cooldownTimers = new Dictionary<int, float>(); // 스킬별 타이머
 
+    private List<ISkill> passiveSkills = new List<ISkill>();
+
     void Start()
     {
         skillLibrary = FindObjectOfType<SkillLibrary>(); // SkillLibrary 찾기
@@ -21,8 +23,31 @@ public class BattleSkillUI : MonoBehaviour
         for (int i = 0; i < skillUseButtons.Length; i++)
         {
             int index = i;
-            skillUseButtons[i].onClick.AddListener(() => UseSkill(index));
+            skillUseButtons[i].onClick.AddListener(() => UseSkill(index)); // 터치로 전환 필요
             cooldownTimers[index] = 0f;
+
+            ISkill skill = skillLibrary.GetSkill(SkillManager.Instance.selectedSkills[i]);
+
+            if (skill != null)
+            {
+                if (skill.IsPassive)
+                {
+                    skillUseButtons[i].interactable = false; // 패시브면 버튼 비활성화
+                    passiveSkills.Add(skill); // 등록
+                }
+                else
+                {
+                    skillUseButtons[i].interactable = true;
+                }
+            }
+        }
+    }
+
+    void Update()
+    {
+        foreach (var skill in passiveSkills)
+        {
+            skill.UsingPassive();
         }
     }
 

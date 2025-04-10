@@ -22,6 +22,16 @@ public class PlayerController : MonoBehaviour
     public bool isOnPlatform = false;
 
    private float maxDagDistance = 2.5f;
+
+
+    // 패시브 스킬 발동중을 체크할 변수
+    public bool passiveSpiderAct = false;
+    private float lastWallDetachTime = -999f;
+    private float wallStickCooldown = 2f;
+
+    private bool isTouchingWall = false;
+
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -69,6 +79,14 @@ public class PlayerController : MonoBehaviour
             else if (touch.phase == TouchPhase.Ended && isJumping == false)
             {
                 Vector2 dragVector = dragStartPosition - currentDragPosition;
+
+                // 벽에 붙어 있을 때 점프하면 중력 및 제약 복원
+                if (passiveSpiderAct)
+                {
+                    rb.gravityScale = 1f;
+                    rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+                }
+
                 ThrowObject(dragVector);
                 lineRenderer.enabled = false;
                 isJumping = true;
@@ -94,6 +112,18 @@ public class PlayerController : MonoBehaviour
                 isJumping = false;
             }
         }
+
+        if ((collision.gameObject.CompareTag("Wall_L") || collision.gameObject.CompareTag("Wall_R")) && passiveSpiderAct == true && !isTouchingWall &&
+            Time.time >= lastWallDetachTime + wallStickCooldown)
+        {
+            Debug.Log("벽에 붙음!");
+            isJumping = false;
+            isTouchingWall = true;
+
+            rb.velocity = new Vector2(0, 0);
+            rb.gravityScale = 0f;
+            rb.constraints = RigidbodyConstraints2D.FreezePositionY | RigidbodyConstraints2D.FreezeRotation;
+        }
     }
 
     void OnCollisionExit2D(Collision2D collision)
@@ -103,6 +133,16 @@ public class PlayerController : MonoBehaviour
             isJumping = true;
             //lineRenderer.enabled = false;
         }
+
+        if ((collision.gameObject.CompareTag("Wall_L") || collision.gameObject.CompareTag("Wall_R")) &&
+           passiveSpiderAct)
+        {
+            Debug.Log("벽에서 떨어짐!");
+            //isJumping = true;
+            isTouchingWall = false;
+            lastWallDetachTime = Time.time;
+        }
+
     }
 
     private void ThrowObject(Vector2 direction)
